@@ -1,94 +1,132 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+Q-1)
+// Class to hold the total sum safely
+class Total {
+    private int totalSum = 0;
 
-public class CalculatorSwing extends JFrame implements ActionListener {
-    JTextField t1, t2, result;
-    JButton add, sub, mul, div;
-
-    CalculatorSwing() {
-        // Create labels
-        JLabel l1 = new JLabel("First Number:");S
-        JLabel l2 = new JLabel("Second Number:");
-        JLabel l3 = new JLabel("Result:");
-
-        // Create text fields
-        t1 = new JTextField();
-        t2 = new JTextField();
-        result = new JTextField();
-        result.setEditable(false);
-
-        // Create buttons
-        add = new JButton("+");
-        sub = new JButton("-");
-        mul = new JButton("*");
-        div = new JButton("/");
-
-        // Set layout to null
-        setLayout(null);
-
-        // Set bounds
-        l1.setBounds(30, 50, 100, 20);
-        t1.setBounds(140, 50, 100, 20);
-
-        l2.setBounds(30, 90, 100, 20);
-        t2.setBounds(140, 90, 100, 20);
-
-        l3.setBounds(30, 130, 100, 20);
-        result.setBounds(140, 130, 100, 20);
-
-        add.setBounds(30, 170, 50, 30);
-        sub.setBounds(90, 170, 50, 30);
-        mul.setBounds(150, 170, 50, 30);
-        div.setBounds(210, 170, 50, 30);
-
-        // Add action listeners
-        add.addActionListener(this);
-        sub.addActionListener(this);
-        mul.addActionListener(this);
-        div.addActionListener(this);
-
-        // Add components to frame
-        add(l1); add(t1);
-        add(l2); add(t2);
-        add(l3); add(result);
-        add(add); add(sub); add(mul); add(div);
-
-        // JFrame settings
-        setTitle("Calculator using JFrame");
-        setSize(320, 270);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
+    // synchronized method to safely update total
+    public synchronized void updateTotal(int value) {
+        totalSum += value;
     }
 
-    public void actionPerformed(ActionEvent e) {
-        try {
-            double a = Double.parseDouble(t1.getText());
-            double b = Double.parseDouble(t2.getText());
-            double res = 0;
-
-            if (e.getSource() == add) {
-                res = a + b;
-            } else if (e.getSource() == sub) {
-                res = a - b;
-            } else if (e.getSource() == mul) {
-                res = a * b;
-            } else if (e.getSource() == div) {
-                if (b != 0)
-                    res = a / b;
-                else {
-                    result.setText("Error: /0");
-                    return;
-                }
-            }
-
-            result.setText(String.valueOf(res));
-        } catch (NumberFormatException ex) {
-            result.setText("Invalid Input");
-        }
-    }
-
-    public static void main(String[] args) {
-        new CalculatorSwing();
+    public int getTotal() {
+        return totalSum;
     }
 }
+
+// Thread to calculate sum of first 100 even numbers
+class EvenSumThread extends Thread {
+    Total total;
+
+    EvenSumThread(Total total) {
+        this.total = total;
+    }
+
+    public void run() {
+        int sumEven = 0;
+        for (int i = 2, count = 0; count < 100; i += 2, count++) {
+            sumEven += i;
+        }
+        total.updateTotal(sumEven);
+        System.out.println("Even sum: " + sumEven);
+    }
+}
+
+// Thread to calculate sum of first 100 odd numbers
+class OddSumThread extends Thread {
+    Total total;
+
+    OddSumThread(Total total) {
+        this.total = total;
+    }
+
+    public void run() {
+        int sumOdd = 0;
+        for (int i = 1, count = 0; count < 100; i += 2, count++) {
+            sumOdd += i;
+        }
+        total.updateTotal(sumOdd);
+        System.out.println("Odd sum: " + sumOdd);
+    }
+}
+
+// Main class to run both threads
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Total total = new Total();
+
+        EvenSumThread t1 = new EvenSumThread(total);
+        OddSumThread t2 = new OddSumThread(total);
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Total Sum = " + total.getTotal());
+    }
+}
+
+
+
+.................................................................................................................
+
+import java.sql.*;
+import java.util.*;
+
+class Employee {
+    int empId;
+    double salary;
+    String department;
+
+    Employee(int empId, double salary, String department) {
+        this.empId = empId;
+        this.salary = salary;
+        this.department = department;
+    }
+}
+
+public class EmployeeDB {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Employee[] employees = new Employee[3];
+
+        // Taking input from user
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Enter details for employee " + (i + 1));
+            System.out.print("Emp ID: ");
+            int id = sc.nextInt();
+            System.out.print("Salary: ");
+            double salary = sc.nextDouble();
+            System.out.print("Department: ");
+            sc.nextLine();  // consume newline
+            String dept = sc.nextLine();
+
+            if (salary < 10000) {
+                salary += salary * 0.10; // increase by 10%
+            }
+
+            employees[i] = new Employee(id, salary, dept);
+        }
+
+        // Database update logic
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
+            String query = "UPDATE employee SET salary=?, department=? WHERE empId=?";
+            PreparedStatement ps = con.prepareStatement(query);
+
+            for (Employee emp : employees) {
+                ps.setDouble(1, emp.salary);
+                ps.setString(2, emp.department);
+                ps.setInt(3, emp.empId);
+                ps.executeUpdate();
+            }
+
+            System.out.println("Employees updated successfully.");
+
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+    }
+}
+
