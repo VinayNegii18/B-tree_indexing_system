@@ -1,9 +1,8 @@
-Q-1)
-// Class to hold the total sum safely
+q-1)
+
 class Total {
     private int totalSum = 0;
 
-    // synchronized method to safely update total
     public synchronized void updateTotal(int value) {
         totalSum += value;
     }
@@ -13,7 +12,6 @@ class Total {
     }
 }
 
-// Thread to calculate sum of first 100 even numbers
 class EvenSumThread extends Thread {
     Total total;
 
@@ -31,7 +29,6 @@ class EvenSumThread extends Thread {
     }
 }
 
-// Thread to calculate sum of first 100 odd numbers
 class OddSumThread extends Thread {
     Total total;
 
@@ -49,7 +46,6 @@ class OddSumThread extends Thread {
     }
 }
 
-// Main class to run both threads
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         Total total = new Total();
@@ -68,8 +64,7 @@ public class Main {
 }
 
 
-
-.................................................................................................................
+q-3)
 
 import java.sql.*;
 import java.util.*;
@@ -91,7 +86,6 @@ public class EmployeeDB {
         Scanner sc = new Scanner(System.in);
         Employee[] employees = new Employee[3];
 
-        // Taking input from user
         for (int i = 0; i < 3; i++) {
             System.out.println("Enter details for employee " + (i + 1));
             System.out.print("Emp ID: ");
@@ -99,17 +93,16 @@ public class EmployeeDB {
             System.out.print("Salary: ");
             double salary = sc.nextDouble();
             System.out.print("Department: ");
-            sc.nextLine();  // consume newline
+            sc.nextLine();
             String dept = sc.nextLine();
 
             if (salary < 10000) {
-                salary += salary * 0.10; // increase by 10%
+                salary += salary * 0.10;
             }
 
             employees[i] = new Employee(id, salary, dept);
         }
 
-        // Database update logic
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
             String query = "UPDATE employee SET salary=?, department=? WHERE empId=?";
