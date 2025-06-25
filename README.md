@@ -123,3 +123,43 @@ public class EmployeeDB {
     }
 }
 
+
+
+Q1) Explain 3 ways to achieve thread synchronization.
+Synchronized Method – Entire method is locked for a thread.
+
+Synchronized Block – Only a specific section of code is locked.
+
+ReentrantLock (from java.util.concurrent.locks) – A more flexible and powerful way to control locking than synchronized keyword.
+
+Q2) Explain why should we create a thread and not a process? (Mention 3 points)
+Threads are lightweight and consume less memory than processes.
+
+Threads within a process share the same memory, so data sharing is easier.
+
+Creating threads is faster and has less overhead than creating processes.
+
+Q3) Explain 3 differences between throw and throws.
+throw is used to explicitly throw an exception, while throws is used to declare exceptions.
+
+throw is followed by an instance; throws is followed by exception class names.
+
+throw appears inside the method; throws is in the method signature.
+
+Q4) Write 3 methods common among List and Set, and explain with help of code.
+add() – Adds an element.
+
+remove() – Removes an element.
+
+contains() – Checks if element exists.
+
+List<String> list = new ArrayList<>();
+Set<String> set = new HashSet<>();
+list.add("Java"); set.add("Java");
+list.contains("Java"); set.contains("Java");
+
+Q5) Explain what is the use of a Driver in JDBC.
+A JDBC Driver acts as a bridge between Java application and the database.
+It helps in establishing a connection, sending SQL queries, and retrieving results.
+Without a driver, Java cannot communicate with the database.
+
