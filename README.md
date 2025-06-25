@@ -1,4 +1,5 @@
-q-1)
+q-1) KT Question last mai h
+
 
 class Total {
     private int totalSum = 0;
