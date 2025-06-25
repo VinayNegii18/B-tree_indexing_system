@@ -1,27 +1,31 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class CalculatorAWT extends Frame implements ActionListener {
-    TextField t1, t2, result;
-    Button add, sub, mul, div;
+public class CalculatorSwing extends JFrame implements ActionListener {
+    JTextField t1, t2, result;
+    JButton add, sub, mul, div;
 
-    CalculatorAWT() {
+    CalculatorSwing() {
         // Create labels
-        Label l1 = new Label("First Number:");
-        Label l2 = new Label("Second Number:");
-        Label l3 = new Label("Result:");
+        JLabel l1 = new JLabel("First Number:");S
+        JLabel l2 = new JLabel("Second Number:");
+        JLabel l3 = new JLabel("Result:");
 
         // Create text fields
-        t1 = new TextField();
-        t2 = new TextField();
-        result = new TextField();
+        t1 = new JTextField();
+        t2 = new JTextField();
+        result = new JTextField();
         result.setEditable(false);
 
         // Create buttons
-        add = new Button("+");
-        sub = new Button("-");
-        mul = new Button("*");
-        div = new Button("/");
+        add = new JButton("+");
+        sub = new JButton("-");
+        mul = new JButton("*");
+        div = new JButton("/");
+
+        // Set layout to null
+        setLayout(null);
 
         // Set bounds
         l1.setBounds(30, 50, 100, 20);
@@ -50,17 +54,11 @@ public class CalculatorAWT extends Frame implements ActionListener {
         add(l3); add(result);
         add(add); add(sub); add(mul); add(div);
 
-        // Frame settings
-        setSize(300, 250);
-        setLayout(null);
+        // JFrame settings
+        setTitle("Calculator using JFrame");
+        setSize(320, 270);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-
-        // Window close
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                dispose();
-            }
-        });
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -91,6 +89,6 @@ public class CalculatorAWT extends Frame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new CalculatorAWT();
+        new CalculatorSwing();
     }
 }
